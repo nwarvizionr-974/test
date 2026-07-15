@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1800">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#829185"/><stop offset=".48" stop-color="#c9bbaa"/><stop offset="1" stop-color="#596c60"/></linearGradient>
-    <filter id="noise"><feTurbulence baseFrequency=".75" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 .09 0"/></filter>
-  </defs>
-  <rect width="1200" height="1800" fill="url(#g)"/>
-  <ellipse cx="150" cy="240" rx="420" ry="560" fill="#f8f0e4" opacity=".12"/>
-  <ellipse cx="1080" cy="1490" rx="530" ry="680" fill="#27372e" opacity=".16"/>
-  <rect width="1200" height="1800" filter="url(#noise)" opacity=".45"/>
-  <g fill="none" stroke="#fff" opacity=".42">
-    <circle cx="600" cy="900" r="290"/><circle cx="600" cy="900" r="250"/>
-  </g>
-  <text x="600" y="870" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="42" opacity=".78">REMPLACEZ PAR</text>
-  <text x="600" y="930" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="58">LA PHOTO DU COUPLE</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1800"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#70807a"/><stop offset=".55" stop-color="#a7b0a5"/><stop offset="1" stop-color="#d9d2c6"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="28"/></filter></defs><rect width="1200" height="1800" fill="url(#g)"/><circle cx="270" cy="310" r="210" fill="#fff" opacity=".18" filter="url(#b)"/><circle cx="980" cy="1180" r="290" fill="#fff" opacity=".12" filter="url(#b)"/><path d="M0 1420c260-170 430-160 610-20 200 155 350 155 590-10v410H0z" fill="#24302b" opacity=".14"/><text x="600" y="890" text-anchor="middle" fill="#fff" font-size="64" font-family="Georgia" letter-spacing="12">VOTRE PHOTO</text><text x="600" y="965" text-anchor="middle" fill="#fff" opacity=".8" font-size="28" font-family="Arial" letter-spacing="5">COUVERTURE 1600 × 2400 PX</text></svg>

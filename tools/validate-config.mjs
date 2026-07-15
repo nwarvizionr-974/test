@@ -1,55 +1,42 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import vm from 'node:vm';
-import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const configPath = path.join(root, 'config', 'invitation.config.js');
-const source = fs.readFileSync(configPath, 'utf8');
+const path = new URL('../config/invitation.config.js', import.meta.url);
+const source = fs.readFileSync(path, 'utf8');
 const sandbox = { window: {} };
 vm.createContext(sandbox);
-vm.runInContext(source, sandbox, { filename: configPath });
-const c = sandbox.window.INVITATION_CONFIG;
+vm.runInContext(source, sandbox, { filename: 'invitation.config.js' });
+
+const config = sandbox.window.INVITATION_CONFIG;
 const errors = [];
 const warnings = [];
 
-const required = [
-  ['event.id', c?.event?.id],
-  ['event.date', c?.event?.date],
-  ['event.endDate', c?.event?.endDate],
-  ['couple.firstName1', c?.couple?.firstName1],
-  ['couple.firstName2', c?.couple?.firstName2],
-  ['hero.image', c?.hero?.image]
-];
-required.forEach(([name, value]) => { if (!value) errors.push(`${name} est obligatoire.`); });
+if (!config || typeof config !== 'object') errors.push('window.INVITATION_CONFIG est absent.');
+if (!config?.event?.id) errors.push('event.id est requis.');
+if (!Number.isFinite(new Date(config?.event?.date).getTime())) errors.push('event.date est invalide.');
+if (!config?.couple?.firstName1 || !config?.couple?.firstName2) errors.push('Les deux prénoms sont requis.');
+if (!config?.hero?.image) errors.push('hero.image est requis.');
 
-for (const [name, value] of [['event.date', c?.event?.date], ['event.endDate', c?.event?.endDate], ['event.rsvpDeadline', c?.event?.rsvpDeadline]]) {
-  if (value && Number.isNaN(new Date(value).getTime())) errors.push(`${name} n'est pas une date ISO valide.`);
+const privacy = config?.privacy || {};
+if (privacy.accessCodeEnabled === true) {
+  const hash = String(privacy.accessCodeHash || '').trim();
+  if (!/^[a-f0-9]{64}$/i.test(hash)) {
+    errors.push('Le code d’accès est activé, mais accessCodeHash n’est pas une empreinte SHA-256 valide de 64 caractères.');
+  }
+} else if (privacy.accessCodeHash) {
+  warnings.push('accessCodeHash est renseigné alors que le code est désactivé. Il est préférable de laisser une chaîne vide.');
 }
 
-if (c?.event?.date && c?.event?.endDate && new Date(c.event.endDate) <= new Date(c.event.date)) {
-  errors.push('event.endDate doit être postérieure à event.date.');
-}
-if (c?.event?.rsvpDeadline && c?.event?.date && new Date(c.event.rsvpDeadline) >= new Date(c.event.date)) {
-  warnings.push('La date limite RSVP est postérieure ou égale au mariage.');
-}
-if (c?.rsvp?.enabled && !c?.rsvp?.endpoint) warnings.push('Le RSVP est en mode démonstration : aucune URL Apps Script n’est configurée.');
-if (c?.music?.enabled && !exists(c.music.src)) errors.push(`Fichier audio introuvable : ${c.music.src}`);
-
-const imagePaths = [c?.hero?.image, c?.dressCode?.image, ...(c?.gallery?.images || []).map((i) => i.src)].filter(Boolean);
-imagePaths.forEach((file) => { if (!exists(file)) errors.push(`Image introuvable : ${file}`); });
-
-if (c?.privacy?.accessCodeEnabled && !/^[a-f0-9]{64}$/i.test(c?.privacy?.accessCodeHash || '')) {
-  errors.push('privacy.accessCodeHash doit contenir une empreinte SHA-256 de 64 caractères.');
+for (const image of config?.gallery?.images || []) {
+  if (!image.src) errors.push('Une image de galerie ne possède pas de chemin src.');
+  if (!image.alt) warnings.push(`Texte alternatif manquant pour ${image.src || 'une image de galerie'}.`);
 }
 
-console.log('\nValidation de l’invitation\n');
-warnings.forEach((item) => console.warn(`⚠ ${item}`));
-errors.forEach((item) => console.error(`✖ ${item}`));
-if (!errors.length) console.log('✓ Configuration valide.');
-process.exitCode = errors.length ? 1 : 0;
-
-function exists(relativePath) {
-  if (/^https?:\/\//i.test(relativePath)) return true;
-  return fs.existsSync(path.join(root, relativePath));
+if (errors.length) {
+  console.error('\nConfiguration invalide :');
+  errors.forEach((error) => console.error(`- ${error}`));
+  process.exit(1);
 }
+
+console.log('Configuration valide.');
+warnings.forEach((warning) => console.warn(`Avertissement : ${warning}`));

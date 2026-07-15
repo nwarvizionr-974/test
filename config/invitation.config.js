@@ -3,8 +3,16 @@
  * ------------------------------------------------
  * Le site est généré automatiquement depuis cet objet.
  * Conserver la structure et modifier uniquement les valeurs.
+ *
+ * IMPORTANT — CODE D'ACCÈS
+ * Le code n'est actif QUE si :
+ *   1. accessCodeEnabled vaut exactement true ;
+ *   2. accessCodeHash contient une empreinte SHA-256 valide de 64 caractères.
+ * Toute autre configuration laisse l'invitation ouverte.
  */
 window.INVITATION_CONFIG = {
+  version: "2026.07.15.1",
+
   event: {
     id: "demo-camille-alexandre-2027",
     language: "fr-FR",
@@ -65,9 +73,9 @@ window.INVITATION_CONFIG = {
   },
 
   announcement: {
-    kicker: "Une nouvelle page s’écrit",
+    kicker: "Une nouvelle page s'écrit",
     title: "Entourés de ceux que nous aimons",
-    text: "Nous serions heureux de vous compter parmi nous pour partager l’émotion de notre cérémonie, les rires du cocktail et la magie de la soirée."
+    text: "Nous serions heureux de vous compter parmi nous pour partager l'émotion de notre cérémonie, les rires du cocktail et la magie de la soirée."
   },
 
   locationsIntro: "Deux rendez-vous, une seule et belle histoire.",
@@ -78,7 +86,7 @@ window.INVITATION_CONFIG = {
       title: "Mairie de Saint-Pierre",
       dateLabel: "Samedi 27 novembre 2027 · 14 h 30",
       address: "Rue Méziaire Guignard, 97410 Saint-Pierre",
-      note: "Merci d’arriver 20 minutes avant le début de la cérémonie.",
+      note: "Merci d'arriver 20 minutes avant le début de la cérémonie.",
       mapUrl: "https://maps.google.com/?q=Mairie+de+Saint-Pierre+La+Reunion"
     },
     {
@@ -99,12 +107,12 @@ window.INVITATION_CONFIG = {
     { time: "16:00", title: "Photos & trajet", text: "Quelques souvenirs avant de rejoindre la réception." },
     { time: "17:00", title: "Cocktail", text: "Bulles, gourmandises et retrouvailles." },
     { time: "19:30", title: "Dîner", text: "À table pour poursuivre la fête." },
-    { time: "22:00", title: "Ouverture du bal", text: "La piste n’attendra plus que vous." }
+    { time: "22:00", title: "Ouverture du bal", text: "La piste n'attendra plus que vous." }
   ],
 
   dressCode: {
     text: "Élégance naturelle et tons doux. Nous vous invitons à privilégier une tenue chic dans la palette ci-dessous.",
-    note: "Le blanc et l’ivoire sont réservés aux mariés.",
+    note: "Le blanc et l'ivoire sont réservés aux mariés.",
     image: "assets/images/dress-placeholder.svg",
     imageAlt: "Inspiration de tenue élégante",
     palette: ["#253a52", "#526c8d", "#8ca2bd", "#c9d3de", "#e8e0d4"]
@@ -112,9 +120,9 @@ window.INVITATION_CONFIG = {
 
   gallery: {
     title: "Quelques instants à deux",
-    intro: "Une petite sélection de souvenirs avant d’en créer de nouveaux avec vous.",
+    intro: "Une petite sélection de souvenirs avant d'en créer de nouveaux avec vous.",
     images: [
-      { src: "assets/images/gallery-1.svg", alt: "Souvenir du couple au bord de l’océan", caption: "Notre première escapade" },
+      { src: "assets/images/gallery-1.svg", alt: "Souvenir du couple au bord de l'océan", caption: "Notre première escapade" },
       { src: "assets/images/gallery-2.svg", alt: "Portrait du couple", caption: "Un dimanche ordinaire, ou presque" },
       { src: "assets/images/gallery-3.svg", alt: "Le couple au coucher du soleil", caption: "Là où tout semble possible" },
       { src: "assets/images/gallery-4.svg", alt: "Détail de mains enlacées", caption: "Main dans la main" }
@@ -122,7 +130,7 @@ window.INVITATION_CONFIG = {
   },
 
   quote: {
-    text: "Il n’y a qu’un bonheur dans la vie : aimer et être aimé.",
+    text: "Il n'y a qu'un bonheur dans la vie : aimer et être aimé.",
     author: "George Sand"
   },
 
@@ -136,8 +144,8 @@ window.INVITATION_CONFIG = {
     endpoint: "",
     mode: "google-apps-script",
     successMessage: "Merci, votre réponse a bien été prise en compte.",
-    demoMessage: "Mode démonstration : la réponse a été enregistrée uniquement sur cet appareil. Configurez l’URL Apps Script pour recevoir les RSVP.",
-    consentText: "J’accepte que ces informations soient utilisées uniquement pour l’organisation du mariage.",
+    demoMessage: "Mode démonstration : la réponse a été enregistrée uniquement sur cet appareil. Configurez l'URL Apps Script pour recevoir les RSVP.",
+    consentText: "J'accepte que ces informations soient utilisées uniquement pour l'organisation du mariage.",
     privacyContact: "contact@votre-domaine.fr"
   },
 
@@ -148,8 +156,9 @@ window.INVITATION_CONFIG = {
   },
 
   privacy: {
+    // Laisser false pour supprimer totalement l'écran de code.
     accessCodeEnabled: false,
-    /** Générer l’empreinte avec docs/GENERER-CODE-ACCES.md */
+    // Laisser vide quand le code est désactivé. Ne jamais écrire le code en clair ici.
     accessCodeHash: ""
   },
 

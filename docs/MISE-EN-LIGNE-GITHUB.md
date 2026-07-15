@@ -1,20 +1,20 @@
 # Mise en ligne sur GitHub Pages
 
-## Dépôt neuf
+## Remplacement complet du dépôt
 
-1. Créez un dépôt GitHub.
-2. Ajoutez tous les fichiers de ce dossier à la racine du dépôt.
-3. Vérifiez que la branche principale s’appelle `main`.
-4. Dans **Settings > Pages**, choisissez **GitHub Actions** comme source.
-5. Poussez un commit sur `main`.
-6. Ouvrez l’onglet **Actions** pour suivre le déploiement.
+1. Téléchargez et décompressez le dossier final.
+2. Dans le dépôt GitHub, supprimez les anciens fichiers ou créez un nouveau dépôt.
+3. Déposez **le contenu du dossier**, et non le dossier parent.
+4. Enregistrez les modifications avec `Commit changes`.
+5. Ouvrez `Settings` puis `Pages`.
+6. Choisissez `Deploy from a branch`, la branche `main` et le dossier `/root`.
 
-Le workflow `.github/workflows/deploy-pages.yml` publie automatiquement le site.
+Pour un dépôt nommé `test`, l’adresse sera normalement :
 
-## Domaine personnalisé
+```text
+https://nom-utilisateur.github.io/test/
+```
 
-Configurez d’abord le domaine dans **Settings > Pages > Custom domain**, puis ajoutez les enregistrements DNS demandés par GitHub chez votre registrar. Activez ensuite **Enforce HTTPS** lorsque l’option devient disponible.
+## Ancien cache Messenger
 
-## Après chaque modification
-
-Un simple commit sur `main` déclenche un nouveau déploiement.
+La nouvelle version supprime automatiquement les anciens caches. Après le premier déploiement, ouvrez une fois le lien dans Chrome ou Firefox. Le navigateur intégré Messenger recevra ensuite la nouvelle version sans conserver l’ancien écran de code.

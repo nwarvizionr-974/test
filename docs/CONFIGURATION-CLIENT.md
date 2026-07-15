@@ -1,44 +1,22 @@
-# Configuration d'une invitation client
+# Configuration client
 
-Toute la personnalisation courante se fait dans `config/invitation.config.js`.
+Le fichier principal est `config/invitation.config.js`.
 
-## 1. Dupliquer le dépôt
+Modifiez les valeurs, mais conservez les noms des propriétés et les accolades.
 
-Créez un dépôt par mariage afin d’isoler les photos, le domaine et les réponses RSVP.
+## Principales zones
 
-## 2. Modifier les informations
-
-Les blocs principaux sont :
-
-- `event` : date, heure, fuseau et date limite RSVP ;
+- `event` : date, fin de l’événement, date limite RSVP et fuseau horaire ;
 - `couple` : prénoms et monogramme ;
-- `theme` : couleurs et typographies ;
-- `hero`, `announcement`, `locations`, `schedule` : contenu éditorial ;
-- `dressCode` : consignes et palette ;
-- `gallery` : photos et légendes ;
-- `rsvp` : paramètres du formulaire ;
-- `music` : activation et fichier audio ;
-- `privacy` : code d’accès dissuasif ;
-- `footer` : phrase finale et crédit.
+- `sections` : affichage ou masquage des sections ;
+- `theme` : couleurs et polices ;
+- `hero`, `announcement`, `locations`, `schedule`, `dressCode`, `gallery`, `quote` : contenus ;
+- `rsvp` : formulaire et adresse du Google Apps Script ;
+- `music` : musique facultative ;
+- `privacy` : code d’accès facultatif.
 
-## 3. Remplacer les images
+Après chaque modification, exécutez :
 
-Déposez les fichiers dans `assets/images/`, puis modifiez les chemins dans la configuration. Utilisez de préférence WebP ou AVIF. Les noms de fichiers ne doivent pas comporter d’espace ni d’accent.
-
-## 4. Vérifier les liens
-
-Testez chaque bouton d’itinéraire, la date du calendrier et le formulaire RSVP sur téléphone.
-
-## 5. Activer la musique
-
-Ajoutez un fichier audio libre de droits ou fourni avec les autorisations nécessaires dans `assets/audio/`, puis définissez :
-
-```js
-music: {
-  enabled: true,
-  src: "assets/audio/notre-musique.mp3",
-  label: "Notre chanson"
-}
+```bash
+node tools/validate-config.mjs
 ```
-
-La musique ne démarre pas automatiquement : les navigateurs imposent une action de l’utilisateur.

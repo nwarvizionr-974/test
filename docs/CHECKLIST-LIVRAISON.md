@@ -1,17 +1,13 @@
-# Checklist avant livraison au client
+# Checklist de livraison
 
-- [ ] Prénoms, date, horaires et fuseau vérifiés
-- [ ] Adresses et itinéraires testés
-- [ ] Date limite RSVP correcte
+- [ ] Prénoms et monogramme vérifiés
+- [ ] Date, heure et fuseau horaire vérifiés
+- [ ] Adresses et liens d’itinéraire testés
 - [ ] Photos compressées et textes alternatifs renseignés
-- [ ] Contraste et lisibilité vérifiés
-- [ ] Formulaire testé jusqu’au Google Sheet
-- [ ] Test sur iPhone Safari
-- [ ] Test sur Android Chrome
-- [ ] Test sur ordinateur
-- [ ] Fichier calendrier contrôlé
-- [ ] Musique autorisée et bouton fonctionnel
-- [ ] Adresse de contact confidentialité renseignée
-- [ ] Indexation choisie volontairement
-- [ ] Domaine et HTTPS fonctionnels
-- [ ] QR code testé depuis une impression réelle
+- [ ] Sections inutiles désactivées
+- [ ] Date limite RSVP vérifiée
+- [ ] Google Apps Script testé, si utilisé
+- [ ] Musique testée, si activée
+- [ ] Code d’accès testé ou désactivé avec `false` et `""`
+- [ ] `node tools/validate-config.mjs` retourne « Configuration valide »
+- [ ] Test sur téléphone, Chrome, Safari et navigateur Messenger

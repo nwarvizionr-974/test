@@ -10,37 +10,98 @@
   <meta property="og:title" content="Invitation de mariage">
   <meta property="og:description" content="Nous avons la joie de vous inviter à notre mariage.">
   <meta property="og:image" content="assets/images/cover-placeholder.svg">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Invitation de mariage</title>
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link id="fontStylesheet" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Italiana&display=swap">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <script src="config/invitation.config.js?v=2" defer></script>
-  <script src="assets/js/app.js?v=2" defer></script>
+  <link id="appStylesheet" rel="stylesheet">
+  <style>
+    [hidden]{display:none!important}
+    html,body{margin:0;min-height:100%;background:#f7f3ee;color:#24302b}
+    body{font-family:Inter,Arial,sans-serif}
+    .boot-loader{position:fixed;inset:0;display:grid;place-items:center;background:#f7f3ee;z-index:9999;transition:opacity .45s ease,visibility .45s ease}
+    .boot-loader.is-hidden{opacity:0;visibility:hidden}
+    .boot-loader__inner{text-align:center}.boot-loader__mark{font:500 3rem/1 Italiana,serif}.boot-loader p{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase}
+  </style>
+  <script>
+    (() => {
+      'use strict';
+      const build = Date.now().toString(36);
+      window.__INVITATION_BUILD__ = build;
+
+      // Supprime une ancienne PWA/service worker du modèle. C'est la cause
+      // principale des configurations obsolètes conservées dans Messenger.
+      const baseScope = new URL('./', window.location.href).href;
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations()
+          .then((registrations) => Promise.all(
+            registrations
+              .filter((registration) => registration.scope === baseScope)
+              .map((registration) => registration.unregister())
+          ))
+          .catch(() => {});
+      }
+      if ('caches' in window) {
+        caches.keys()
+          .then((keys) => Promise.all(
+            keys.filter((key) => key.startsWith('invitation-digitale')).map((key) => caches.delete(key))
+          ))
+          .catch(() => {});
+      }
+
+      document.getElementById('appStylesheet').href = `assets/css/styles.css?v=${build}`;
+
+      const loadScript = (src) => new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `${src}?v=${build}`;
+        script.async = false;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Impossible de charger ${src}`));
+        document.head.appendChild(script);
+      });
+
+      window.addEventListener('DOMContentLoaded', async () => {
+        try {
+          await loadScript('config/invitation.config.js');
+          await loadScript('assets/js/app.js');
+        } catch (error) {
+          console.error(error);
+          const loader = document.getElementById('pageLoader');
+          if (loader) {
+            loader.innerHTML = '<div class="boot-loader__inner"><strong>Impossible de charger l’invitation.</strong><p>Vérifiez votre connexion puis actualisez la page.</p></div>';
+          }
+        }
+      });
+    })();
+  </script>
 </head>
 <body>
-  <noscript>
-    <div class="noscript">Cette invitation nécessite JavaScript pour afficher son contenu.</div>
-  </noscript>
+  <noscript><div class="noscript">Cette invitation nécessite JavaScript pour afficher son contenu.</div></noscript>
 
-  <div class="page-loader" id="pageLoader" aria-live="polite">
-    <div class="loader-monogram" id="loaderMonogram">M</div>
-    <p>Votre invitation se prépare…</p>
+  <div class="boot-loader" id="pageLoader" aria-live="polite">
+    <div class="boot-loader__inner">
+      <div class="boot-loader__mark" id="loaderMonogram">M</div>
+      <p>Votre invitation se prépare…</p>
+    </div>
   </div>
 
-  <div class="access-gate" id="accessGate" hidden>
-    <form class="access-card" id="accessForm">
-      <span class="eyebrow">Invitation privée</span>
-      <h1>Bienvenue</h1>
-      <p>Saisissez le code transmis avec votre invitation.</p>
-      <label class="sr-only" for="accessCode">Code d’accès</label>
-      <input id="accessCode" name="accessCode" type="password" autocomplete="one-time-code" required>
-      <button class="button button--primary" type="submit">Ouvrir l’invitation</button>
-      <p class="form-message" id="accessMessage" role="status"></p>
-    </form>
-  </div>
+  <template id="accessGateTemplate">
+    <div class="access-gate" id="accessGate" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+      <form class="access-card" id="accessForm">
+        <span class="eyebrow">Invitation privée</span>
+        <h1 id="accessTitle">Bienvenue</h1>
+        <p>Saisissez le code transmis avec votre invitation.</p>
+        <label class="sr-only" for="accessCode">Code d’accès</label>
+        <input id="accessCode" name="accessCode" type="password" inputmode="text" autocomplete="one-time-code" required>
+        <button class="button button--primary" type="submit">Ouvrir l’invitation</button>
+        <p class="form-message" id="accessMessage" role="status"></p>
+      </form>
+    </div>
+  </template>
 
   <button class="sound-toggle" id="soundToggle" type="button" aria-label="Activer la musique" hidden>
     <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -59,9 +120,7 @@
       <h1 class="hero-names" id="heroNames"></h1>
       <p class="hero-date" id="heroDate"></p>
       <p class="hero-intro" data-bind="hero.intro"></p>
-      <a class="scroll-cue" href="#annonce" aria-label="Découvrir l’invitation">
-        <span>Découvrir</span><i aria-hidden="true"></i>
-      </a>
+      <a class="scroll-cue" href="#annonce" aria-label="Découvrir l’invitation"><span>Découvrir</span><i aria-hidden="true"></i></a>
     </div>
   </header>
 
@@ -86,9 +145,7 @@
           <div><strong id="minutes">00</strong><span>minutes</span></div>
           <div><strong id="seconds">00</strong><span>secondes</span></div>
         </div>
-        <button class="button button--dark" id="calendarButton" type="button">
-          <span aria-hidden="true">＋</span> Ajouter à mon calendrier
-        </button>
+        <button class="button button--dark" id="calendarButton" type="button"><span aria-hidden="true">＋</span> Ajouter à mon calendrier</button>
       </div>
     </section>
 
@@ -115,9 +172,7 @@
     </section>
 
     <section class="section dress-section" id="dress-code">
-      <div class="dress-media reveal">
-        <img id="dressImage" src="assets/images/dress-placeholder.svg" alt="">
-      </div>
+      <div class="dress-media reveal"><img id="dressImage" src="assets/images/dress-placeholder.svg" alt=""></div>
       <div class="dress-content reveal">
         <span class="eyebrow">Quelques indications</span>
         <h2>Dress code</h2>
@@ -154,21 +209,11 @@
           <p class="lead" data-bind="rsvp.intro"></p>
           <p class="rsvp-deadline" id="rsvpDeadline"></p>
         </div>
-
         <form class="rsvp-form reveal" id="rsvpForm" novalidate>
-          <div class="honeypot" aria-hidden="true">
-            <label for="website">Ne pas remplir</label>
-            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-          </div>
+          <div class="honeypot" aria-hidden="true"><label for="website">Ne pas remplir</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <input type="hidden" name="eventId" id="eventId">
           <input type="hidden" name="submittedAt" id="submittedAt">
-
-          <div class="field field--full">
-            <label for="guestName">Nom et prénom *</label>
-            <input id="guestName" name="guestName" type="text" autocomplete="name" required>
-            <span class="field-error"></span>
-          </div>
-
+          <div class="field field--full"><label for="guestName">Nom et prénom *</label><input id="guestName" name="guestName" type="text" autocomplete="name" required><span class="field-error"></span></div>
           <fieldset class="field field--full attendance-field">
             <legend>Serez-vous parmi nous ? *</legend>
             <div class="segmented-control">
@@ -177,45 +222,16 @@
             </div>
             <span class="field-error"></span>
           </fieldset>
-
           <div class="conditional-fields" id="conditionalFields">
-            <div class="field">
-              <label for="guestCount">Nombre de personnes *</label>
-              <select id="guestCount" name="guestCount"></select>
-              <span class="field-error"></span>
-            </div>
-
-            <div class="field">
-              <label for="contact">Téléphone ou e-mail</label>
-              <input id="contact" name="contact" type="text" autocomplete="email">
-            </div>
-
-            <div class="field field--full" id="mealField">
-              <label for="mealChoice">Choix du repas</label>
-              <select id="mealChoice" name="mealChoice"></select>
-            </div>
-
-            <div class="field field--full">
-              <label for="dietary">Allergies ou régime alimentaire</label>
-              <textarea id="dietary" name="dietary" rows="3"></textarea>
-            </div>
+            <div class="field"><label for="guestCount">Nombre de personnes *</label><select id="guestCount" name="guestCount"></select><span class="field-error"></span></div>
+            <div class="field"><label for="contact">Téléphone ou e-mail</label><input id="contact" name="contact" type="text" autocomplete="email"></div>
+            <div class="field field--full" id="mealField"><label for="mealChoice">Choix du repas</label><select id="mealChoice" name="mealChoice"></select></div>
+            <div class="field field--full"><label for="allergies">Allergies ou régime alimentaire</label><textarea id="allergies" name="allergies" rows="3"></textarea></div>
+            <div class="field field--full"><label for="message">Un petit mot pour les mariés</label><textarea id="message" name="message" rows="4"></textarea></div>
           </div>
-
-          <div class="field field--full">
-            <label for="message">Un petit mot pour les mariés</label>
-            <textarea id="message" name="message" rows="4"></textarea>
-          </div>
-
-          <label class="consent field--full">
-            <input id="consent" name="consent" type="checkbox" required>
-            <span id="consentText"></span>
-          </label>
-          <span class="field-error consent-error"></span>
-
-          <button class="button button--primary button--submit" type="submit" id="submitButton">
-            Envoyer ma réponse
-          </button>
-          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+          <label class="consent"><input id="consent" name="consent" type="checkbox" required><span id="consentText"></span></label>
+          <button class="button button--primary field--full" id="submitButton" type="submit">Envoyer ma réponse</button>
+          <p class="form-message field--full" id="formMessage" role="status"></p>
         </form>
       </div>
     </section>
@@ -224,16 +240,15 @@
   <footer class="footer">
     <div class="footer-monogram" id="footerMonogram"></div>
     <p id="footerText"></p>
+    <small id="footerCredit"></small>
     <a href="#accueil">Revenir en haut</a>
-    <p class="footer-credit" id="footerCredit"></p>
   </footer>
 
   <dialog class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Fermer">×</button>
+    <button id="lightboxClose" type="button" aria-label="Fermer">×</button>
     <img id="lightboxImage" alt="">
     <p id="lightboxCaption"></p>
   </dialog>
-
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

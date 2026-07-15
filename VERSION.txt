@@ -1,0 +1,2 @@
+Invitation digitale — version 2026.07.15.1
+Correctif principal : suppression du cache PWA et sécurisation du code d'accès facultatif.

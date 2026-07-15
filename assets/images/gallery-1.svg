@@ -1,3 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#78897e"/><stop offset="1" stop-color="#d8c9b8"/></linearGradient></defs>
-<rect width="900" height="1200" fill="url(#g)"/><circle cx="450" cy="530" r="230" fill="none" stroke="#fff" opacity=".3"/><path d="M170 1000Q450 730 730 1000" fill="#fff" opacity=".12"/><text x="450" y="545" text-anchor="middle" fill="#fff" font-family="Georgia,serif" font-size="54">PHOTO 1</text><text x="450" y="610" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="25" opacity=".8">À REMPLACER</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6f817a
+#d9cfc0
+#9d8a7b"/><stop offset="1" stop-color="#c7bda9
+#8fa09a
+#d8c4ab"/></linearGradient></defs><rect width="1400" height="1000" fill="url(#g1)"/><circle cx="420" cy="330" r="200" fill="#fff" opacity=".14"/><path d="M0 800c260-160 430-180 650-30s430 150 750-50v280H0z" fill="#24302b" opacity=".12"/><text x="700" y="520" text-anchor="middle" fill="#fff" font-size="54" font-family="Georgia" letter-spacing="10">PHOTO 1</text></svg>

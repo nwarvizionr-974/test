@@ -1,68 +1,63 @@
-# Invitation digitale de mariage — One page
+# Invitation digitale de mariage — version corrigée
 
-Modèle complet, responsive et réutilisable pour créer des invitations de mariage sous forme de site one page hébergé sur GitHub Pages.
+Modèle statique, responsive et réutilisable pour GitHub Pages.
 
-## Fonctionnalités
+## Correctif du problème de code d’accès
 
-- couverture immersive et animations au défilement ;
-- configuration centralisée par client ;
-- compte à rebours ;
-- ajout au calendrier au format ICS ;
-- lieux avec itinéraires ;
-- programme chronologique ;
-- dress code et palette ;
-- galerie avec visionneuse ;
-- musique facultative ;
-- formulaire RSVP ;
-- connexion Google Sheets via Apps Script ;
-- code d’accès dissuasif facultatif ;
-- mode hors ligne léger ;
-- déploiement automatique GitHub Pages.
+Cette version supprime la cause du comportement récurrent observé dans Messenger : l’ancien service worker conservait parfois une ancienne configuration.
+
+Désormais :
+
+- aucun service worker n’est enregistré ;
+- les anciens caches `invitation-digitale-*` sont supprimés automatiquement ;
+- les fichiers `config/invitation.config.js`, `assets/js/app.js` et `assets/css/styles.css` sont chargés avec une adresse unique à chaque ouverture ;
+- le code d’accès ne peut s’activer qu’avec `accessCodeEnabled: true` **et** une empreinte SHA-256 valide de 64 caractères ;
+- une valeur incorrecte comme `"1234"` dans `accessCodeHash` ne bloque plus le site.
 
 ## Démarrage rapide
 
-1. Ouvrez `config/invitation.config.js` et remplacez les données de démonstration.
+1. Modifiez `config/invitation.config.js`.
 2. Remplacez les images dans `assets/images/`.
-3. Lancez `node tools/validate-config.mjs`.
-4. Testez localement avec un petit serveur HTTP.
-5. Configurez le RSVP avec `docs/RSVP-GOOGLE-SHEETS.md`.
-6. Publiez avec `docs/MISE-EN-LIGNE-GITHUB.md`.
+3. Vérifiez la configuration avec :
 
-### Tester localement
+```bash
+node tools/validate-config.mjs
+```
 
-Depuis le dossier du projet :
+4. Testez localement :
 
 ```bash
 python -m http.server 8080
 ```
 
-Puis ouvrez `http://localhost:8080`.
+5. Déposez tout le contenu du dossier à la racine du dépôt GitHub.
 
-## Documentation
+## Désactiver le code d’accès
 
-- [Configuration client](docs/CONFIGURATION-CLIENT.md)
-- [RSVP Google Sheets](docs/RSVP-GOOGLE-SHEETS.md)
-- [Mise en ligne GitHub](docs/MISE-EN-LIGNE-GITHUB.md)
-- [Code d’accès](docs/GENERER-CODE-ACCES.md)
-- [Checklist de livraison](docs/CHECKLIST-LIVRAISON.md)
-- [Modèle d’information RSVP](docs/MENTIONS-RGPD-MODELE.md)
+```javascript
+privacy: {
+  accessCodeEnabled: false,
+  accessCodeHash: ""
+}
+```
 
-## Structure
+## Activer le code d’accès
 
-```text
-assets/                  styles, scripts, images et audio
-backend/google-apps-script/  backend RSVP à coller dans Apps Script
-config/                  fichier à modifier pour chaque client
-docs/                    guides opérationnels
-.github/workflows/       déploiement automatique GitHub Pages
-index.html               structure du site
-sw.js                    cache hors ligne
+Générez d’abord une empreinte :
+
+```bash
+node tools/generate-access-hash.mjs "VotreCode"
+```
+
+Puis utilisez :
+
+```javascript
+privacy: {
+  accessCodeEnabled: true,
+  accessCodeHash: "empreinte_sha256_de_64_caracteres"
+}
 ```
 
 ## Confidentialité
 
-GitHub Pages publie un site statique accessible sur Internet. Ne placez jamais dans ce dépôt une liste privée d’invités, des informations médicales détaillées, des mots de passe ou des secrets d’API. Le code d’accès inclus est une barrière de confort, pas une authentification forte.
-
-## Licence
-
-Le code est fourni sous licence MIT. Les photos, polices, musiques et contenus ajoutés par chaque client restent soumis à leurs propres droits.
+GitHub Pages publie un site statique accessible sur Internet. Le code d’accès est une barrière visuelle, pas une authentification forte. Ne placez jamais de secrets, de mots de passe réutilisés ou de données sensibles dans le dépôt.

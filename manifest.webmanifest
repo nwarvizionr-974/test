@@ -2,10 +2,14 @@
   "name": "Invitation de mariage",
   "short_name": "Invitation",
   "start_url": "./",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#f7f3ee",
   "theme_color": "#f7f3ee",
   "icons": [
-    { "src": "assets/images/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
   ]
 }
