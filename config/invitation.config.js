@@ -150,7 +150,7 @@ window.INVITATION_CONFIG = {
   privacy: {
     accessCodeEnabled: false,
     /** Générer l’empreinte avec docs/GENERER-CODE-ACCES.md */
-    accessCodeHash: "1234"
+    accessCodeHash: ""
   },
 
   footer: {
