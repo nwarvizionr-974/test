@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ee">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Invitation digitale de mariage">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Invitation de mariage">
+  <meta property="og:description" content="Nous avons la joie de vous inviter à notre mariage.">
+  <meta property="og:image" content="assets/images/cover-placeholder.svg">
+  <title>Invitation de mariage</title>
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="fontStylesheet" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Italiana&display=swap">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="config/invitation.config.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+  <noscript>
+    <div class="noscript">Cette invitation nécessite JavaScript pour afficher son contenu.</div>
+  </noscript>
+
+  <div class="page-loader" id="pageLoader" aria-live="polite">
+    <div class="loader-monogram" id="loaderMonogram">M</div>
+    <p>Votre invitation se prépare…</p>
+  </div>
+
+  <div class="access-gate" id="accessGate" hidden>
+    <form class="access-card" id="accessForm">
+      <span class="eyebrow">Invitation privée</span>
+      <h1>Bienvenue</h1>
+      <p>Saisissez le code transmis avec votre invitation.</p>
+      <label class="sr-only" for="accessCode">Code d’accès</label>
+      <input id="accessCode" name="accessCode" type="password" autocomplete="one-time-code" required>
+      <button class="button button--primary" type="submit">Ouvrir l’invitation</button>
+      <p class="form-message" id="accessMessage" role="status"></p>
+    </form>
+  </div>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Activer la musique" hidden>
+    <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span id="soundLabel">Musique</span>
+  </button>
+  <audio id="backgroundAudio" preload="none" loop></audio>
+
+  <header class="hero" id="accueil">
+    <div class="hero-media" aria-hidden="true">
+      <img id="heroImage" src="assets/images/cover-placeholder.svg" alt="">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content reveal">
+      <p class="eyebrow" data-bind="hero.kicker"></p>
+      <div class="monogram" id="heroMonogram" aria-hidden="true"></div>
+      <h1 class="hero-names" id="heroNames"></h1>
+      <p class="hero-date" id="heroDate"></p>
+      <p class="hero-intro" data-bind="hero.intro"></p>
+      <a class="scroll-cue" href="#annonce" aria-label="Découvrir l’invitation">
+        <span>Découvrir</span><i aria-hidden="true"></i>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="section announcement" id="annonce">
+      <div class="ornament ornament--top" aria-hidden="true"></div>
+      <div class="section-inner section-inner--narrow reveal">
+        <span class="eyebrow" data-bind="announcement.kicker"></span>
+        <h2 data-bind="announcement.title"></h2>
+        <p class="lead" data-bind="announcement.text"></p>
+        <div class="signature" id="signatureNames"></div>
+      </div>
+    </section>
+
+    <section class="section countdown-section" id="compte-a-rebours">
+      <div class="section-inner reveal">
+        <span class="eyebrow">Avant le grand jour</span>
+        <h2 id="countdownHeading">Le temps nous rapproche</h2>
+        <div class="countdown" id="countdown" role="timer" aria-live="off">
+          <div><strong id="days">000</strong><span>jours</span></div>
+          <div><strong id="hours">00</strong><span>heures</span></div>
+          <div><strong id="minutes">00</strong><span>minutes</span></div>
+          <div><strong id="seconds">00</strong><span>secondes</span></div>
+        </div>
+        <button class="button button--dark" id="calendarButton" type="button">
+          <span aria-hidden="true">＋</span> Ajouter à mon calendrier
+        </button>
+      </div>
+    </section>
+
+    <section class="section locations-section" id="lieux">
+      <div class="section-inner">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Rendez-vous</span>
+          <h2>Les lieux</h2>
+          <p data-bind="locationsIntro"></p>
+        </div>
+        <div class="locations-grid" id="locationsGrid"></div>
+      </div>
+    </section>
+
+    <section class="section schedule-section" id="programme">
+      <div class="section-inner section-inner--narrow">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Le déroulé</span>
+          <h2>Programme</h2>
+          <p data-bind="scheduleIntro"></p>
+        </div>
+        <ol class="timeline" id="timeline"></ol>
+      </div>
+    </section>
+
+    <section class="section dress-section" id="dress-code">
+      <div class="dress-media reveal">
+        <img id="dressImage" src="assets/images/dress-placeholder.svg" alt="">
+      </div>
+      <div class="dress-content reveal">
+        <span class="eyebrow">Quelques indications</span>
+        <h2>Dress code</h2>
+        <p class="lead" data-bind="dressCode.text"></p>
+        <div class="palette" id="palette" aria-label="Palette de couleurs conseillée"></div>
+        <p class="small-note" data-bind="dressCode.note"></p>
+      </div>
+    </section>
+
+    <section class="section gallery-section" id="galerie">
+      <div class="section-inner">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Notre histoire</span>
+          <h2 data-bind="gallery.title"></h2>
+          <p data-bind="gallery.intro"></p>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <section class="section quote-section" id="citation">
+      <div class="section-inner section-inner--narrow reveal">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote id="quoteText"></blockquote>
+        <cite id="quoteAuthor"></cite>
+      </div>
+    </section>
+
+    <section class="section rsvp-section" id="rsvp">
+      <div class="section-inner rsvp-layout">
+        <div class="rsvp-copy reveal">
+          <span class="eyebrow">Votre réponse</span>
+          <h2 data-bind="rsvp.title"></h2>
+          <p class="lead" data-bind="rsvp.intro"></p>
+          <p class="rsvp-deadline" id="rsvpDeadline"></p>
+        </div>
+
+        <form class="rsvp-form reveal" id="rsvpForm" novalidate>
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Ne pas remplir</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <input type="hidden" name="eventId" id="eventId">
+          <input type="hidden" name="submittedAt" id="submittedAt">
+
+          <div class="field field--full">
+            <label for="guestName">Nom et prénom *</label>
+            <input id="guestName" name="guestName" type="text" autocomplete="name" required>
+            <span class="field-error"></span>
+          </div>
+
+          <fieldset class="field field--full attendance-field">
+            <legend>Serez-vous parmi nous ? *</legend>
+            <div class="segmented-control">
+              <label><input type="radio" name="attendance" value="yes" required><span>Avec plaisir</span></label>
+              <label><input type="radio" name="attendance" value="no" required><span>Malheureusement non</span></label>
+            </div>
+            <span class="field-error"></span>
+          </fieldset>
+
+          <div class="conditional-fields" id="conditionalFields">
+            <div class="field">
+              <label for="guestCount">Nombre de personnes *</label>
+              <select id="guestCount" name="guestCount"></select>
+              <span class="field-error"></span>
+            </div>
+
+            <div class="field">
+              <label for="contact">Téléphone ou e-mail</label>
+              <input id="contact" name="contact" type="text" autocomplete="email">
+            </div>
+
+            <div class="field field--full" id="mealField">
+              <label for="mealChoice">Choix du repas</label>
+              <select id="mealChoice" name="mealChoice"></select>
+            </div>
+
+            <div class="field field--full">
+              <label for="dietary">Allergies ou régime alimentaire</label>
+              <textarea id="dietary" name="dietary" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="field field--full">
+            <label for="message">Un petit mot pour les mariés</label>
+            <textarea id="message" name="message" rows="4"></textarea>
+          </div>
+
+          <label class="consent field--full">
+            <input id="consent" name="consent" type="checkbox" required>
+            <span id="consentText"></span>
+          </label>
+          <span class="field-error consent-error"></span>
+
+          <button class="button button--primary button--submit" type="submit" id="submitButton">
+            Envoyer ma réponse
+          </button>
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-monogram" id="footerMonogram"></div>
+    <p id="footerText"></p>
+    <a href="#accueil">Revenir en haut</a>
+    <p class="footer-credit" id="footerCredit"></p>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Fermer">×</button>
+    <img id="lightboxImage" alt="">
+    <p id="lightboxCaption"></p>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
