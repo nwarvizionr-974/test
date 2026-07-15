@@ -42,7 +42,7 @@ window.INVITATION_CONFIG = {
   seo: {
     title: "Camille & Alexandre — Notre mariage",
     description: "Nous avons la joie de vous inviter à célébrer notre mariage.",
-    shareImage: "assets/images/cover-placeholder.svg",
+    shareImage: "assets/images/cover-placeholder.png",
     indexable: false
   },
 
