@@ -68,7 +68,7 @@ window.INVITATION_CONFIG = {
   hero: {
     kicker: "Nous nous marions",
     intro: "Nous avons le plaisir de vous inviter à célébrer cette journée qui nous est si chère.",
-    image: "assets/images/cover-placeholder.svg",
+    image: "assets/images/cover-placeholder.png",
     imageAlt: "Photo de Camille et Alexandre"
   },
 
