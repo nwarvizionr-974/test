@@ -113,7 +113,7 @@ window.INVITATION_CONFIG = {
   dressCode: {
     text: "Élégance naturelle et tons doux. Nous vous invitons à privilégier une tenue chic dans la palette ci-dessous.",
     note: "Le blanc et l'ivoire sont réservés aux mariés.",
-    image: "assets/images/dress-placeholder.svg",
+    image: "assets/images/dress-placeholder.png",
     imageAlt: "Inspiration de tenue élégante",
     palette: ["#253a52", "#526c8d", "#8ca2bd", "#c9d3de", "#e8e0d4"]
   },
@@ -122,10 +122,10 @@ window.INVITATION_CONFIG = {
     title: "Quelques instants à deux",
     intro: "Une petite sélection de souvenirs avant d'en créer de nouveaux avec vous.",
     images: [
-      { src: "assets/images/gallery-1.svg", alt: "Souvenir du couple au bord de l'océan", caption: "Notre première escapade" },
-      { src: "assets/images/gallery-2.svg", alt: "Portrait du couple", caption: "Un dimanche ordinaire, ou presque" },
-      { src: "assets/images/gallery-3.svg", alt: "Le couple au coucher du soleil", caption: "Là où tout semble possible" },
-      { src: "assets/images/gallery-4.svg", alt: "Détail de mains enlacées", caption: "Main dans la main" }
+      { src: "assets/images/gallery-1.png", alt: "Souvenir du couple au bord de l'océan", caption: "Notre première escapade" },
+      { src: "assets/images/gallery-2.png", alt: "Portrait du couple", caption: "Un dimanche ordinaire, ou presque" },
+      { src: "assets/images/gallery-3.png", alt: "Le couple au coucher du soleil", caption: "Là où tout semble possible" },
+      { src: "assets/images/gallery-4.png", alt: "Détail de mains enlacées", caption: "Main dans la main" }
     ]
   },
 
